@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
@@ -30,6 +31,16 @@ jobs:
 
       - name: Build TypeScript
         run: npm run build
+
+      - name: Debug AWS Configuration
+        env:
+          ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          REGION: ${{ vars.AWS_REGION }}
+        run: |
+          echo "AWS Region: $REGION"
+          echo "Role ARN: $ROLE_ARN"
+          echo "GitHub Ref: $GITHUB_REF"
+          echo "Repository: $GITHUB_REPOSITORY"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
