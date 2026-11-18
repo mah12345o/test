@@ -15,6 +15,14 @@ app.get("/", (req, res) => {
     res.json({ message: "API is running..." });
 });
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Server is healthy",
+        timestamp: new Date().toISOString()
+    });
+});
+
 const startServer = async () => {
     try {
         await connectDB();
