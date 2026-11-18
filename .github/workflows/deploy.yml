@@ -69,7 +69,25 @@ jobs:
             repository_id,
             repository_owner_id
           }'
+      - name: Inspect GitHub OIDC Claims
+        shell: bash
+        run: |
+          TOKEN_JSON=$(curl -sS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com")
 
+          TOKEN=$(echo "$TOKEN_JSON" | jq -r '.value')
+
+          PAYLOAD=$(TOKEN="$TOKEN" node -e \
+            "console.log(Buffer.from(process.env.TOKEN.split('.')[1], 'base64url').toString())")
+
+          echo "$PAYLOAD" | jq '{
+            iss,
+            aud,
+            sub,
+            repository,
+            ref
+          }'
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
