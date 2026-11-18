@@ -69,7 +69,7 @@ jobs:
             repository_id,
             repository_owner_id
           }'
-      - name: Inspect GitHub OIDC Claims
+
         shell: bash
         run: |
           TOKEN_JSON=$(curl -sS \
